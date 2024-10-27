@@ -16,7 +16,7 @@ A simple bank system implemented in C++ that allows users to create accounts, ma
 
 ## File Structure
 
-```
+
 /BankSystem
 │
 ├── src/                         # Source files
@@ -53,20 +53,19 @@ A simple bank system implemented in C++ that allows users to create accounts, ma
 ## Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/BankSystem.git
+   ```bash   git clone https://github.com/yourusername/BankSystem.git
    cd BankSystem
-   ```
+
 
 2. Compile the project:
-   ```bash
+
    make
-   ```
+
 
 3. Run the application:
-   ```bash
+
    ./BankSystem
-   ```
+
 
 ## Usage
 
@@ -89,7 +88,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Inspiration from various banking systems.
 - Thanks to the contributors and C++ community for their resources and support.
-```
+
 
 ### Instructions for Use:
 
