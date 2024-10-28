@@ -1,0 +1,19 @@
+# Ignore build directories
+/build/
+
+# Ignore Visual Studio files
+.vscode/
+*.exe
+*.pdb
+
+# Ignore compiled object files
+*.o
+*.obj
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
