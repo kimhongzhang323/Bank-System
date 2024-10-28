@@ -1,48 +1,40 @@
 #include "Bank.h"
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <cstdlib> // For rand() and srand()
+#include <ctime>   // For time
 
-/**
- * @brief Main entry point for the bank system application.
- * 
- * This program provides a basic console interface for a bank system,
- * allowing users to create accounts and view account details. The
- * main loop displays a menu and takes user input to perform actions
- * on the bank system.
- * 
- * @return int Returns 0 on successful execution.
- */
 int main() {
-    srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator for account ID generation.
-    int choice;
-    std::string accountID;
+    std::srand(static_cast<unsigned int>(std::time(nullptr))); // Seed the random number generator
+    Bank bank;
 
-    // Main program loop to display menu options and perform actions based on user input.
-    do {
-        std::cout << "Bank System\n";
+    while (true) {
+        std::cout << "\nWelcome to the Bank System!\n";
         std::cout << "1. Create Account\n";
         std::cout << "2. View Account\n";
-        std::cout << "0. Exit\n";
-        std::cout << "Enter choice: ";
+        std::cout << "3. Exit\n";
+        std::cout << "Choose an option: ";
+
+        int choice;
         std::cin >> choice;
 
         switch (choice) {
             case 1:
-                CreateAccount();  // Calls function to create a new account.
+                bank.CreateAccount();
                 break;
-            case 2:
-                std::cout << "Enter Account ID to view: ";
+            case 2: {
+                std::string accountID;
+                std::cout << "Enter account ID to view: ";
                 std::cin >> accountID;
-                viewAccount(accountID);  // Calls function to view account details based on account ID.
+                bank.viewAccount(accountID);
                 break;
-            case 0:
-                std::cout << "Exiting...\n";  // Exits the program.
-                break;
+            }
+            case 3:
+                std::cout << "Exiting...\n";
+                return 0;
             default:
-                std::cout << "Invalid choice. Please try again.\n";  // Handles invalid menu choices.
+                std::cout << "Invalid option. Please try again.\n";
         }
-    } while (choice != 0);
+    }
 
     return 0;
 }
