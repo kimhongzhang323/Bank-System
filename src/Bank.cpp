@@ -9,30 +9,42 @@
 #include <filesystem> // For filesystem operations
 namespace fs = std::filesystem;
 
+/**
+ * @class Account
+ * @brief Represents a bank account with basic information and operations.
+ */
 class Account {
 private:
-    std::string name;
-    int accountNumber; 
-    std::string accountID;
-    double balance; 
+    std::string name;            ///< Account holder's name.
+    int accountNumber;           ///< Unique account number.
+    std::string accountID;       ///< Unique identifier for the account.
+    double balance;              ///< Current account balance.
 
 public:
-    // Constructor
-    Account(std::string name, int accountNumber, std::string accountID, double balance)
-        : name(name), accountNumber(accountNumber), accountID(accountID), balance(balance) {}
+    /**
+     * @brief Constructs an Account with given details.
+     * @param name Name of the account holder.
+     * @param accountNumber Unique account number.
+     * @param accountID Unique identifier for the account.
+     * @param balance Initial balance of the account.
+     */
+    Account(std::string name, int accountNumber, std::string accountID, double balance);
 
     // Getters
-    std::string getName() const { return name; }
-    int getAccountNumber() const { return accountNumber; }
-    std::string getAccountID() const { return accountID; }
-    double getBalance() const { return balance; }
+    std::string getName() const;
+    int getAccountNumber() const;
+    std::string getAccountID() const;
+    double getBalance() const;
 
     // Methods
-    void deposit(double amount) { balance += amount; }
-    void withdraw(double amount) { balance -= amount; }
+    void deposit(double amount);
+    void withdraw(double amount);
 };
 
-// Function to generate a random account ID
+/**
+ * @brief Generates a random 10-digit account ID.
+ * @return A string containing a randomly generated 10-digit account ID.
+ */
 std::string generateAccountID() {
     std::string accountID = "";
     for (int i = 0; i < 10; i++) {
@@ -41,34 +53,43 @@ std::string generateAccountID() {
     return accountID;
 }
 
-// Function to save account details to a CSV file
+/**
+ * @brief Saves the account details to a CSV file.
+ * @param account The Account object containing details to save.
+ */
 void saveAccountToFile(const Account &account) {
     std::string absolutePath = "C:\\Users\\kimho\\OneDrive\\Documents\\GitHub\\Bank-System\\data\\Account.csv";
 
+    // Ensure the directory exists; create if it does not.
     fs::path dataDir("C:\\Users\\kimho\\OneDrive\\Documents\\GitHub\\Bank-System\\data");
     if (!fs::exists(dataDir)) {
-        fs::create_directory(dataDir); // Create the directory if it doesn't exist
+        fs::create_directory(dataDir);
     }
 
-    std::ofstream file(absolutePath, std::ios::app); // Use the absolute path for the file
-
+    // Open file in append mode to add account details
+    std::ofstream file(absolutePath, std::ios::app);
     if (!file.is_open()) {
         std::cerr << "Error: Unable to open Account.csv for writing. Please check the file path and permissions.\n";
         return;
     }
 
-    // Write account details as CSV
+    // Write account details to CSV
     file << account.getName() << ","
          << account.getAccountNumber() << ","
          << account.getAccountID() << ","
          << account.getBalance() << "\n";
 
-    std::cout << "Account details saved successfully.\n"; // Feedback to user
+    std::cout << "Account details saved successfully.\n";
 }
 
-// Function to generate a unique account number
+/**
+ * @brief Generates a unique account number that does not already exist in the data file.
+ * @return A unique integer representing the account number.
+ */
 int generateUniqueAccountNumber() {
     std::set<int> existingAccountNumbers; // Set to store existing account numbers
+
+    // Open CSV file and read existing account numbers
     std::ifstream inFile("C:\\Users\\kimho\\OneDrive\\Documents\\GitHub\\Bank-System\\data\\Account.csv");
     if (inFile.is_open()) {
         std::string line;
@@ -76,20 +97,23 @@ int generateUniqueAccountNumber() {
             std::istringstream ss(line);
             std::string accountNumStr;
             std::getline(ss, accountNumStr, ','); // Read account number from CSV
-            existingAccountNumbers.insert(std::stoi(accountNumStr)); // Add to set
+            existingAccountNumbers.insert(std::stoi(accountNumStr));
         }
         inFile.close();
     }
 
     int accountNumber;
+    // Generate a unique account number by avoiding existing ones
     do {
-        accountNumber = rand() % 1000000; // Generate a random account number (e.g., 6 digits)
-    } while (existingAccountNumbers.find(accountNumber) != existingAccountNumbers.end()); // Ensure uniqueness
+        accountNumber = rand() % 1000000; // Generate a 6-digit number
+    } while (existingAccountNumbers.find(accountNumber) != existingAccountNumbers.end());
 
-    return accountNumber; // Return unique account number
+    return accountNumber;
 }
 
-// Function to create a new account
+/**
+ * @brief Prompts the user to enter account information and creates a new account.
+ */
 void CreateAccount() {
     std::string name;
     double balance;
@@ -98,13 +122,11 @@ void CreateAccount() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, name);
 
-    // Validate name input
     if (name.empty()) {
         std::cerr << "Error: Name cannot be empty.\n";
         return;
     }
 
-    // Generate a unique account number
     int accountNumber = generateUniqueAccountNumber();
     std::cout << "This is your account number: " << accountNumber << "\n";
 
@@ -114,14 +136,16 @@ void CreateAccount() {
         return;
     }
 
-    // Generate account ID within this method
     std::string accountID = generateAccountID();
     Account account(name, accountNumber, accountID, balance);
-    
+
     saveAccountToFile(account);
 }
 
-// Function to view account details by account ID
+/**
+ * @brief Searches for and displays account details by the given account ID.
+ * @param accountID The ID of the account to view.
+ */
 void viewAccount(const std::string& accountID) {
     std::ifstream inFile("C:\\Users\\kimho\\OneDrive\\Documents\\GitHub\\Bank-System\\data\\Account.csv");
     if (!inFile.is_open()) {
@@ -153,10 +177,3 @@ void viewAccount(const std::string& accountID) {
         std::cout << "Account not found.\n";
     }
 }
-
-#include <filesystem> // Include the filesystem header
-#include <string>     // Include the string header if dataDir is a string
-
-namespace fs = std::filesystem; // Create an alias for std::filesystem
-
-
